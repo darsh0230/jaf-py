@@ -378,6 +378,10 @@ def make_litellm_provider(
                 # Prepare request parameters
                 request_params = {"model": model_name, "messages": messages, "stream": False}
 
+                # Add session_id from conversation_id for LiteLLM tracking
+                if config.conversation_id:
+                    request_params["extra_body"] = {"session_id": config.conversation_id}
+
                 # Add optional parameters
                 if agent.model_config:
                     if agent.model_config.temperature is not None:
@@ -620,6 +624,10 @@ def make_litellm_provider(
                 "messages": messages,
             }
 
+            # Add session_id from conversation_id for LiteLLM tracking
+            if config.conversation_id:
+                request_params["extra_body"] = {"session_id": config.conversation_id}
+
             # Add optional parameters
             if agent.model_config:
                 if agent.model_config.temperature is not None:
@@ -827,6 +835,10 @@ def make_litellm_sdk_provider(
             # Prepare request parameters for LiteLLM
             request_params = {"model": model_name, "messages": messages, **self.litellm_kwargs}
 
+            # Add session_id from conversation_id for LiteLLM tracking
+            if config.conversation_id:
+                request_params["session_id"] = config.conversation_id
+
             # Add API key if provided
             if self.api_key:
                 request_params["api_key"] = self.api_key
@@ -1006,6 +1018,10 @@ def make_litellm_sdk_provider(
                 "stream_options": {"include_usage": True},  # Request usage data in streaming
                 **self.litellm_kwargs,
             }
+
+            # Add session_id from conversation_id for LiteLLM tracking
+            if config.conversation_id:
+                request_params["session_id"] = config.conversation_id
 
             # Add API key if provided
             if self.api_key:
